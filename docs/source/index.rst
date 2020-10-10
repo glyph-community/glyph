@@ -1,4 +1,5 @@
-# glyph - Puzzle & Puzzle Hunt Application
+Welcome to Glyph's documentation!
+=================================
 
 Glyph is an application designed to host and manage puzzles and puzzle hunt competitions effectively
 and easily.
@@ -13,13 +14,26 @@ participants through a slew of features, some of which are listed below.
 Glyph represents mainly the backend API that powers and stores the data. It aims to be front-end
 agnostic, and the community provides a few different options for viable front-ends and integrations.
 
-Please [read the documentation][rtd] for more project information and usage guides.
+Who is Glyph Built For?
++++++++++++++++++++++++
 
-## Contributing
+Glyph is built for the puzzle communities and for organizations who want to leverage puzzles
+to bring people together in positive ways. Glyph is designed to help both large organizations
+and small groups easily create and manage their own puzzle hunts, puzzle challenges, and more,
+while including the tools needed to communicate with their user-base to stoke fun & competition.
 
-Thanks for your interest in contributing! There are many ways to contribute to this project, but
-to begin, please read our [contribution guidelines](.github/CONTRIBUTING.md). Due to its infancy,
-please reach out via a new GitHub issue so that we may properly onboard you. As the project grows
-and matures, we will have a more automated & informal contribution process.
+Documentation Contents
+++++++++++++++++++++++
 
-[rtd]: https://glyph-project.readthedocs.io/en/latest/
+.. toctree::
+   :maxdepth: 1
+
+   dev/index
+   dev/contributing
+
+
+Indices and tables
+++++++++++++++++++
+
+* :ref:`genindex`
+* :ref:`search`

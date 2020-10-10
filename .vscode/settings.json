@@ -1,0 +1,19 @@
+{
+    // Must be Python 3.7+
+    "python.pythonPath": "${workspaceFolder}/venv/bin/python",
+    "files.exclude": {
+        "**/__pycache__": true
+    },
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_quotes,pylint_django"
+    ],
+    "python.testing.pytestArgs": [
+        "babka_api"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.envFile": "${workspaceFolder}/.env",
+    "restructuredtext.confPath": "${workspaceFolder}/docs/source"
+}

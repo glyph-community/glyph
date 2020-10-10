@@ -87,8 +87,7 @@ report it by emailing [bbpuzzlehunt@gmail.com](mailto:bbpuzzlehunt@gmail.com).
    each other doesn’t get us anywhere. Instead, focus on helping to
    resolve issues and learning from mistakes.
 
-Original text courtesy of the `Speak Up!
-project <http://web.archive.org/web/20141109123859/http://speakup.io/coc.html>`__.
+Original text courtesy of the [Speak Up! project][speak-up].
 This version was adopted from the `Django Code of Conduct <https://www.djangoproject.com/conduct/>`_.
 
 ## Contributing Overview
@@ -149,3 +148,5 @@ For a pull request to get merged it needs to have the following things:
    
    As the project matures and becomes more popular, good documentation is key for allowing those
    in the Glyph community to work with the project in an independent, autonomous manner.
+
+[speak-up]: http://web.archive.org/web/20141109123859/http://speakup.io/coc.html
