@@ -285,6 +285,19 @@ only run one process at a time, Docker Compose is leveraged to run the entire en
 including all application components and dependencies in a full-fledged local environment that
 can mirror the real world.
 
+.. code-block::
+
+   # Create the entire environment locally inside docker
+   docker-compose up --build
+
+   # When done, you can ctrl-z it to keep data, or
+   # you can run the following to really kill everything
+   docker-compose down
+
+Note that by default, the Docker Compose environment will use a hybrid of production and development
+features, allowing for hot reloading - meaning any code changes instantly get picked up and restart
+the server - while still allowing all core components to run in a sandbox environment.
+
 Code Style Guide
 ----------------
 

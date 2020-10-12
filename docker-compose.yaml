@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        REQUIREMENTS: requirements/development.txt
+    env_file: .env
+    command: 
+      - /opt/manage.py
+      - runserver
+      - "0.0.0.0:8000"
+    environment: {}
+    volumes:
+      - ./glyph:/opt/glyph
+    ports:
+      - "8000:8000"

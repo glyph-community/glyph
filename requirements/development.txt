@@ -16,5 +16,4 @@ django-extensions==3.0.9
 flake8==3.8.4
 
 # Used to load from the dotenv file
-# @DEVONLY
 python-dotenv==0.14.0
