@@ -27,7 +27,7 @@ Django Background
 The Glyph backend is written using the `Python Django framework <https://www.djangoproject.com/>`_,
 so we *highly* advise that you learn the basics of working with a Django-based project before
 contributing major bits of code. For smaller commits and typo fixes, this level of knowledge
-may not be required. On top of this, `Django Rest Framework <https://www.django-rest-framework.org/>`_
+may not be required. On top of this, `Django Rest Framework <drf_>`_
 is also heavily used to serve most (if not all) of the API traffic and routes.
 
 Layers of Abstraction
@@ -62,7 +62,7 @@ Serializer
 **********
 
 `Serializers <https://www.django-rest-framework.org/api-guide/serializers/>`_ are a
-`Django Rest Framework <https://www.django-rest-framework.org/>`_ concept that describe converting
+`Django Rest Framework <drf_>`_ concept that describe converting
 models to and from JSON, and under what circumstances. These automatic and provide a common
 interface for describing how (de)serialization works through the project and its routes.
 
@@ -228,3 +228,22 @@ using :code:`docker-compose`. While local operations, namely :code:`manage.py ru
 only run one process at a time, Docker Compose is leveraged to run the entire environment,
 including all application components and dependencies in a full-fledged local environment that
 can mirror the real world.
+
+Code Style Guide
+----------------
+
+Before releases are made or Pull Requests are approved, they must pass PEP8-compatible checks using
+:code:`flake8`, a `Python style guide enforcer <https://flake8.pycqa.org/en/latest/index.html>`_.
+This will check for syntax errors, but will also ensure that any code in the project follows the
+best rules and practices of the Python community, which will ensure a high code quality.
+
+Documentation
+-------------
+
+Documentation is all located under the :code:`docs` directory and is written in reStructuredText
+and is compiled to HTML using `Sphinx <https://www.sphinx-doc.org/en/master/>`_. This generated
+HTML is then built and managed automatically by `ReadTheDocs.io <https://readthedocs.org/>`_. For a
+quick overview of reStructuredText, check out
+`this website <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_.
+
+.. _drf: https://www.django-rest-framework.org/
