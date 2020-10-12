@@ -18,7 +18,7 @@ import sys
 
 if platform.python_version_tuple() < ('3', '7'):
     raise RuntimeError(
-        'Babka API requires Python 3.7 or higher (current: Python {})'.format(
+        'Glyph requires Python 3.7 or higher (current: Python {})'.format(
             platform.python_version()
         )
     )
@@ -37,9 +37,14 @@ def is_testing(argv=None):
 
 IS_TESTING = is_testing()
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Project root that contains this entire project, not just the python code
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+
+# App directory where apps are located
+APP_DIR = os.path.join(BASE_DIR, 'apps')
 
 
 # Quick-start development settings - unsuitable for production

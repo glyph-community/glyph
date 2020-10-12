@@ -1,9 +1,5 @@
-import os
-import subprocess
-
-from django.conf import settings
-
 from ..base import AdminCommand
+
 
 class Command(AdminCommand):
     """
@@ -13,23 +9,14 @@ class Command(AdminCommand):
     requires_system_checks = False
 
     def add_arguments(self, parser):
-        pass
+        parser.add_argument('--syntax', action='store_true')
 
     def handle(self, *args, **options):
-        args = list(args)
-        output_type = args.pop(0) if args else 'html'
-        subdir = options['dir']
-        os.chdir(subdir)
-        cmd = options['sphinx_build']
-
-        build = options['build_dir']
-        real_output = os.path.join(build, 'html')
-        doctrees = os.path.join(build, '.doctrees')
-
-        args = [cmd, f'-b={output_type}', f'-d={doctrees}', '-W', options['source_dir'], real_output] + args
-        self.info(f'$> "{args}"')
-        p = subprocess.Popen(args, stdout=subprocess.PIPE, bufsize=1)
-        for line in iter(p.stdout.readline, b''):
-            self.info(line.decode('utf-8'))
-        p.stdout.close()
-        p.wait()
+        flake_args = ['flake8', 'glyph', '--statistics', '--count']
+        if options['syntax']:
+            self.info('Syntax checking...')
+            flake_args += ['--exit-zero', '--max-complexity=10']
+        else:
+            self.info('Style checking...')
+            flake_args += ['--select=E9,F63,F7,F82', '--show-source']
+        self.subprocess(flake_args)

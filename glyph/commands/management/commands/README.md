@@ -1,4 +1,4 @@
-# Custom Babka Management Commands
+# Custom Glyph Management Commands
 
 This directory lists the custom `manage.py` commands that are used in the project. To see what 
 is available, either look through the files in this directory, or if you are interested in the command 

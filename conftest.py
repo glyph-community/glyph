@@ -13,7 +13,7 @@ else:
     runner = DiscoverRunner()
     db_config = None
     def pytest_configure():
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'babka_api.configuration.settings')
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'glyph.configuration.settings')
         setup()
         runner.setup_test_environment()
         db_config = runner.setup_databases()

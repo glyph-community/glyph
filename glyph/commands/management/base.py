@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import configargparse
 from django.core.management.base import BaseCommand, CommandError, DjangoHelpFormatter
@@ -37,8 +38,8 @@ class AdminCommand(BaseCommand):
 
     DEFAULT_CONFIG_DIRS = [
         '.commands',
-        '~/.babka/management-api',
-        '/etc/babka/management-api'
+        '~/.glyph',
+        '/etc/glyph'
     ]
 
     def add_arguments(self, parser):
@@ -118,6 +119,7 @@ class AdminCommand(BaseCommand):
             printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
         """
         total = len(iterable)
+
         # Progress Bar Printing Function
         def printProgressBar(iteration):
             percent = ('{0:.' + str(decimals) + 'f}').format(100 * (iteration / float(total)))
@@ -132,6 +134,21 @@ class AdminCommand(BaseCommand):
             printProgressBar(i + 1)
         # Print New Line on Complete
         print()
+
+    def subprocess(self, args, acceptable_codes=(0,)):
+        self.info(f'$> {" ".join(args)}')
+        output = []
+        p = subprocess.Popen(args, stdout=subprocess.PIPE)
+        for line in iter(p.stdout.readline, b''):
+            line_str = line.decode('utf-8')
+            self.info(line_str)
+            output.append(line_str)
+
+        p.stdout.close()
+        p.wait()
+        if p.returncode not in acceptable_codes:
+            self.abort(f'{args[0]} returned a non-zero code')
+        return output
 
     def abort(self, error):
         """Exit the command due to an error

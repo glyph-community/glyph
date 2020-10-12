@@ -5,6 +5,7 @@ from django.conf import settings
 
 from ..base import AdminCommand
 
+
 class Command(AdminCommand):
     """
     Tries to make a connection to the database
@@ -84,4 +85,3 @@ class Command(AdminCommand):
             self.success('Connected to the database')
         else:
             self.abort('Could not connect to the database')
-        
