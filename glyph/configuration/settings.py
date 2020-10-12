@@ -10,10 +10,41 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import logging
 import os
+import platform
+import sys
+
+
+if platform.python_version_tuple() < ('3', '7'):
+    raise RuntimeError(
+        'Glyph requires Python 3.7 or higher (current: Python {})'.format(
+            platform.python_version()
+        )
+    )
+
+
+def is_testing(argv=None):
+    """Return True if running django or py.test unit tests.
+    """
+    if 'PYTEST_CURRENT_TEST' in os.environ.keys():
+        return True
+    argv = sys.argv if argv is None else argv
+    if len(argv) >= 1 and ('py.test' in argv[0] or 'py/test.py' in argv[0]):
+        return True
+    return len(argv) >= 2 and argv[1] in ['test', 'lint']
+
+
+IS_TESTING = is_testing()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Project root that contains this entire project, not just the python code
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+
+# App directory where apps are located
+APP_DIR = os.path.join(BASE_DIR, 'apps')
 
 
 # Quick-start development settings - unsuitable for production
@@ -115,9 +146,60 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'collected-static')
+
+# Logging
+# https://docs.djangoproject.com/en/3.1/topics/logging/
+
+LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+            'formatter': 'simple' if DEBUG else 'verbose'
+        },
+        'glyph': {
+            'handlers': ['console'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+            'formatter': 'simple' if DEBUG else 'verbose'
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        },
+    },
+}
+
+if IS_TESTING:
+    logging.disable(logging.CRITICAL)

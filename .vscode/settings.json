@@ -9,7 +9,7 @@
         "--load-plugins=pylint_quotes,pylint_django"
     ],
     "python.testing.pytestArgs": [
-        "babka_api"
+        "glyph"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,

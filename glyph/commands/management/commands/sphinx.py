@@ -1,9 +1,7 @@
 import os
-import subprocess
-
-from django.conf import settings
 
 from ..base import AdminCommand
+
 
 class Command(AdminCommand):
     """
@@ -11,8 +9,6 @@ class Command(AdminCommand):
     This is used by Docker to ensure the database is up and running
     """
     requires_system_checks = False
-
-    DOCS_SUBDIRECTORY = 'docs'
 
     def add_arguments(self, parser):
         parser.add_argument('--dir', type=str, default='docs')
@@ -32,9 +28,4 @@ class Command(AdminCommand):
         doctrees = os.path.join(build, '.doctrees')
 
         args = [cmd, f'-b={output_type}', f'-d={doctrees}', '-W', options['source_dir'], real_output] + args
-        self.info(f'$> "{args}"')
-        p = subprocess.Popen(args, stdout=subprocess.PIPE, bufsize=1)
-        for line in iter(p.stdout.readline, b''):
-            self.info(line.decode('utf-8'))
-        p.stdout.close()
-        p.wait()
+        self.subprocess(args)
