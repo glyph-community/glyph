@@ -2,6 +2,9 @@
 # included in the real requirements file
 # -----------------------------------------
 
+# Used for manage.py commands to have advanced parsing options
+ConfigArgParse==1.2.3
+
 # Used for testing coverage
 # @DEVONLY
 coverage==5.3
