@@ -1,3 +1,11 @@
+# Anything marked with @DEVONLY will not be
+# included in the real requirements file
+# -----------------------------------------
+
+# Used for testing coverage
+# @DEVONLY
+coverage==5.3
+
 Django==3.1.2
 
 # Used for PEP8 code-checking
