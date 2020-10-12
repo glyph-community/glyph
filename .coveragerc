@@ -1,0 +1,35 @@
+[run]
+omit =
+    */apps.py
+    */admin.py
+    */__init__.py
+    */migrations/*.py
+    */management/*.py
+
+    */configuration/settings.py
+    */configuration/gunicorn.py
+    */configuration/wsgi.py
+    */configuration/celery.py
+    */urls.py
+
+branch = True
+
+[report]
+omit =
+    */apps.py
+    */admin.py
+    */__init__.py
+    */migrations/*.py
+    */management/*.py
+
+    */configuration/settings.py
+    */configuration/gunicorn.py
+    */configuration/wsgi.py
+    */configuration/celery.py
+    */urls.py
+
+skip_covered = True
+precision = 2
+exclude_lines = 
+    def __str__
+    pragma: no cover
