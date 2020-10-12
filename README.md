@@ -15,6 +15,12 @@ agnostic, and the community provides a few different options for viable front-en
 
 Please [read the documentation][rtd] for more project information and usage guides.
 
+### Build Status
+
+| **`develop`** | ![Sphinx Docs Testing](https://github.com/glyph-community/glyph/workflows/Sphinx%20Docs%20Testing/badge.svg?branch=develop) | ![Django Project Testing](https://github.com/glyph-community/glyph/workflows/Django%20Project%20Testing/badge.svg?branch=develop) |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| **`main`**    | ![Sphinx Docs Testing](https://github.com/glyph-community/glyph/workflows/Sphinx%20Docs%20Testing/badge.svg?branch=main)    | ![Django Project Testing](https://github.com/glyph-community/glyph/workflows/Django%20Project%20Testing/badge.svg?branch=main)    |
+
 ## Contributing
 
 Thanks for your interest in contributing! There are many ways to contribute to this project, but
