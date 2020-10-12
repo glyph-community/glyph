@@ -228,3 +228,20 @@ using :code:`docker-compose`. While local operations, namely :code:`manage.py ru
 only run one process at a time, Docker Compose is leveraged to run the entire environment,
 including all application components and dependencies in a full-fledged local environment that
 can mirror the real world.
+
+Code Style Guide
+----------------
+
+Before releases are made or Pull Requests are approved, they must pass PEP8-compatible checks using
+:code:`flake8`, a `Python style guide enforcer <https://flake8.pycqa.org/en/latest/index.html>`_.
+This will check for syntax errors, but will also ensure that any code in the project follows the
+best rules and practices of the Python community, which will ensure a high code quality.
+
+Documentation
+-------------
+
+Documentation is all located under the :code:`docs` directory and is written in reStructuredText
+and is compiled to HTML using `Sphinx <https://www.sphinx-doc.org/en/master/>`_. This generated
+HTML is then built and managed automatically by `ReadTheDocs.io <https://readthedocs.org/>`_. For a
+quick overview of reStructuredText, check out
+`this website <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_.
