@@ -2,15 +2,21 @@
 # included in the real requirements file
 # -----------------------------------------
 
+# Used for manage.py commands to have advanced parsing options
+ConfigArgParse==1.2.3
+
 # Used for testing coverage
 # @DEVONLY
 coverage==5.3
 
 Django==3.1.2
 
+# Used to provide common model & manage.py extensions
+django-extensions==3.0.9
+
 # Used for PEP8 code-checking
+# @DEVONLY
 flake8==3.8.4
 
 # Used to load from the dotenv file
-# @DEVONLY
 python-dotenv==0.14.0
