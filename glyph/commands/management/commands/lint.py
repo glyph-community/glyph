@@ -13,10 +13,7 @@ class Command(AdminCommand):
     requires_system_checks = False
 
     def add_arguments(self, parser):
-        parser.add_argument('--dir', type=str, default='docs')
-        parser.add_argument('--sphinx-build', type=str, default=os.getenv('SPHINXBUILD', 'sphinx-build'))
-        parser.add_argument('--source-dir', type=str, default=os.getenv('SOURCEDIR', 'source'))
-        parser.add_argument('--build-dir', type=str, default=os.getenv('BUILDDIR', 'build'))
+        pass
 
     def handle(self, *args, **options):
         args = list(args)
