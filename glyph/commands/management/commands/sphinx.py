@@ -9,6 +9,7 @@ class Command(AdminCommand):
     This is used by Docker to ensure the database is up and running
     """
     requires_system_checks = False
+    help = 'Generate ReadTheDocs documentation using Sphinx.'
 
     def add_arguments(self, parser):
         parser.add_argument('--dir', type=str, default='docs')

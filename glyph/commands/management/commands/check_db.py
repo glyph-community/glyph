@@ -11,6 +11,7 @@ class Command(AdminCommand):
     Tries to make a connection to the database
     This is used by Docker to ensure the database is up and running
     """
+    help = 'Check that the database can be connected to on the assigned host and port.'
     requires_system_checks = False
 
     DEFAULT_MAX_TRIES = 4
@@ -21,7 +22,7 @@ class Command(AdminCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--host', type=str, default=self.DATABASE_SETTINGS['HOST'])
-        parser.add_argument('--port', type=int, default=int(self.DATABASE_SETTINGS['PORT']))
+        parser.add_argument('--port', type=int, default=int(self.DATABASE_SETTINGS.get('PORT', 1234) or 1234))
         parser.add_argument(
             '-t',
             '--max-tries',
@@ -41,7 +42,7 @@ class Command(AdminCommand):
             '-i',
             '--ignore',
             dest='ignored_type',
-            default=settings.DEFAULT_DATABASE_TYPE,
+            default=None,
             type=str,
             help='If settings.DEFAULT_DATABASE_TYPE is set to this value, it will not attempt a connection'
         )

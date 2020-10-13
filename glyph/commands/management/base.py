@@ -1,4 +1,5 @@
 import os
+import signal
 import subprocess
 
 import configargparse
@@ -138,14 +139,18 @@ class AdminCommand(BaseCommand):
     def subprocess(self, args, acceptable_codes=(0,)):
         self.info(f'$> {" ".join(args)}')
         output = []
-        p = subprocess.Popen(args, stdout=subprocess.PIPE)
-        for line in iter(p.stdout.readline, b''):
-            line_str = line.decode('utf-8')
-            self.info(line_str)
-            output.append(line_str)
+        try:
+            p = subprocess.Popen(args, stdout=subprocess.PIPE)
+            for line in iter(p.stdout.readline, b''):
+                line_str = line.decode('utf-8')
+                self.info(line_str)
+                output.append(line_str)
 
-        p.stdout.close()
-        p.wait()
+            p.stdout.close()
+            p.wait()
+        except KeyboardInterrupt:
+            p.send_signal(signal.SIGINT)
+            p.wait()
         if p.returncode not in acceptable_codes:
             self.abort(f'{args[0]} returned a non-zero code')
         return output

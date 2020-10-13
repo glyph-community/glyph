@@ -7,6 +7,7 @@ class Command(AdminCommand):
     This is used by Docker to ensure the database is up and running
     """
     requires_system_checks = False
+    help = 'Run flake8 against the application to check for syntax and style errors.'
 
     def add_arguments(self, parser):
         parser.add_argument('--syntax', action='store_true')
