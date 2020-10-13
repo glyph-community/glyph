@@ -14,8 +14,10 @@ load_dotenv()
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'glyph.configuration.settings')
 
-    is_testing = any(map(lambda arg: arg in sys.argv, COVERAGE_COMMANDS))
-    if is_testing:
+    can_cover = any(map(lambda arg: arg in sys.argv, COVERAGE_COMMANDS))
+    skip_coverage = sys.argv.pop(sys.argv.index('--skip-cov')) if can_cover and '--skip-cov' in sys.argv else False
+    perform_coverage = can_cover and not skip_coverage
+    if perform_coverage:
         import coverage
         cov = coverage.coverage(
             source=['glyph'],
@@ -34,7 +36,7 @@ def main():
         ) from exc
     execute_from_command_line(sys.argv)
 
-    if is_testing:
+    if perform_coverage:
         cov.stop()
         cov.save()
         try:

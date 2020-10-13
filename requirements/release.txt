@@ -5,5 +5,10 @@
 # requirements by placing a line above the requirement with @DEVONLY in it.
 ConfigArgParse==1.2.3
 Django==3.1.2
+dj_database_url==0.5.0
+django-cors-headers==3.5.0
 django-extensions==3.0.9
+gunicorn==20.0.4
+psycopg2==2.8.6
+pylibmc==1.5.2
 python-dotenv==0.14.0

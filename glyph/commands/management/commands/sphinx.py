@@ -14,11 +14,25 @@ class Command(AdminCommand):
     def add_arguments(self, parser):
         parser.add_argument('--dir', type=str, default='docs')
         parser.add_argument('--sphinx-build', type=str, default=os.getenv('SPHINXBUILD', 'sphinx-build'))
-        parser.add_argument('--source-dir', type=str, default=os.getenv('SOURCEDIR', 'source'))
-        parser.add_argument('--build-dir', type=str, default=os.getenv('BUILDDIR', 'build'))
+        parser.add_argument('--source-dir', type=str, default=os.getenv('SOURCEDIR', '.'))
+        parser.add_argument('--build-dir', type=str, default=os.getenv('BUILDDIR', '_build'))
+        parser.add_argument('--watch', action='store_true', help='Auto-reload on changes')
 
     def handle(self, *args, **options):
         args = list(args)
+        if not options['watch']:
+            self.classic(args, options)
+        else:
+            self.auto_watch(args, options)
+
+    def auto_watch(self, args, options):
+        subdir = options['dir']
+        build = options['build_dir']
+        real_output = os.path.join(subdir, build, 'html')
+        args = ['sphinx-autobuild', subdir, real_output]
+        self.subprocess(args)
+
+    def classic(self, args, options):
         output_type = args.pop(0) if args else 'html'
         subdir = options['dir']
         os.chdir(subdir)

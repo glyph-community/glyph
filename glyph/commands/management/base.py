@@ -3,7 +3,9 @@ import signal
 import subprocess
 
 import configargparse
-from django.core.management.base import BaseCommand, CommandError, DjangoHelpFormatter
+from django.core.management.base import (
+    BaseCommand, CommandError, DjangoHelpFormatter
+)
 
 
 class CommandParser(configargparse.ArgParser):
@@ -89,7 +91,7 @@ class AdminCommand(BaseCommand):
         parser.add_argument('--traceback', action='store_true', help='Raise on CommandError exceptions')
         parser.add_argument(
             '--no-color', action='store_true',
-            help='Don\'t colorize the command output.',
+            help="Don't colorize the command output.",
         )
         parser.add_argument(
             '--force-color', action='store_true',
@@ -136,7 +138,7 @@ class AdminCommand(BaseCommand):
         # Print New Line on Complete
         print()
 
-    def subprocess(self, args, acceptable_codes=(0,)):
+    def subprocess(self, args, acceptable_codes=(0,), raise_on_code=True):
         self.info(f'$> {" ".join(args)}')
         output = []
         try:
@@ -151,9 +153,10 @@ class AdminCommand(BaseCommand):
         except KeyboardInterrupt:
             p.send_signal(signal.SIGINT)
             p.wait()
-        if p.returncode not in acceptable_codes:
-            self.abort(f'{args[0]} returned a non-zero code')
-        return output
+        if p.returncode not in acceptable_codes and raise_on_code:
+            str_codes = [str(x) for x in acceptable_codes]
+            self.abort(f'{args[0]} returned a code that was not in acceptable range [{", ".join(str_codes)}]')
+        return p.returncode, output
 
     def abort(self, error):
         """Exit the command due to an error

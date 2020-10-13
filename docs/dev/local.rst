@@ -1,5 +1,5 @@
-Developer Documentation
-=======================
+Local Development
+=================
 
 .. admonition:: Current State of Documentation
 
@@ -20,76 +20,6 @@ Before you begin, please read the :doc:`Contribution Guidelines <contributing>` 
 working with the project easier for both you and our maintainers. We ask & expect that all
 contributions in the form of issues and pull requests follow the formats presented in the guide.
 
-
-Django Background
------------------
-
-The Glyph backend is written using the `Python Django framework <https://www.djangoproject.com/>`_,
-so we *highly* advise that you learn the basics of working with a Django-based project before
-contributing major bits of code. For smaller commits and typo fixes, this level of knowledge
-may not be required. On top of this, `Django Rest Framework <drf_>`_
-is also heavily used to serve most (if not all) of the API traffic and routes.
-
-Layers of Abstraction
-+++++++++++++++++++++
-
-If you do not have time to commit to following the Django documentation, the following is designed
-to give a crash course overview of the project and what its comprised of. Its in no way meant to be
-extensive or comprehensive.
-
-
-App
-***
-
-Django is built around the concept of **apps**. This README does not go terribly in depth of what
-they are, but essentially they are specifically-structured modules that provide separation of
-functionality in the Django project.
-
-A Django app is a small library representing a discrete part of a larger project. For example,
-we have our apps under the ``glyph.apps`` module, each of which comprises some core
-functionality of the total project.
-
-
-Model
-*****
-
-At the core of each app is the list of **models** it defines. Models map database tables to Python objects.
-Again, Django covers the responsibilities and usages of models pretty extensively, so please
-`check out their documentation <https://docs.djangoproject.com/en/3.1/topics/db/models/>`_ on it.
-
-
-Serializer
-**********
-
-`Serializers <https://www.django-rest-framework.org/api-guide/serializers/>`_ are a
-`Django Rest Framework <drf_>`_ concept that describe converting
-models to and from JSON, and under what circumstances. These automatic and provide a common
-interface for describing how (de)serialization works through the project and its routes.
-
-
-View / Viewsets
-***************
-
-`Views <https://www.django-rest-framework.org/api-guide/views/>`_ provide an API endpoint that tie
-together a model, its serializer, and a request method (``GET``, ``POST``, ``DELETE``...).
-Django Rest Framework has tooling to abstract views out to very similar class declarations.
-
-Views are usually collected into a single
-`ViewSet <https://www.django-rest-framework.org/api-guide/viewsets/>`_,
-which defines all of the associated views needed for a model, handling different actions, such as
-creating, deleting, listing, and retrieving instances.
-
-These viewsets are attached to `Routers <https://www.django-rest-framework.org/api-guide/routers/>`_
-that automatically generate the URL patterns for the associated views.
-
-Viewset Filter
-**************
-
-`Filters <https://www.django-rest-framework.org/api-guide/filtering/>`_ act on views & viewsets to
-return a subset of models based on *query parameters*. This can include pagination, normal filtering
-for specific objects through exact or containing searches, and ordering. Each view usually
-has an associated `FilterSet` that determines what fields and query parameters can be filtered
-against on a model.
 
 Local Development Setup
 -----------------------
@@ -288,7 +218,7 @@ can mirror the real world.
 .. code-block::
 
    # Create the entire environment locally inside docker
-   docker-compose up --build
+   docker-compose up --build --remove-orphans
 
    # When done, you can ctrl-z it to keep data, or
    # you can run the following to really kill everything
@@ -314,5 +244,3 @@ and is compiled to HTML using `Sphinx <https://www.sphinx-doc.org/en/master/>`_.
 HTML is then built and managed automatically by `ReadTheDocs.io <https://readthedocs.org/>`_. For a
 quick overview of reStructuredText, check out
 `this website <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_.
-
-.. _drf: https://www.django-rest-framework.org/

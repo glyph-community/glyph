@@ -15,6 +15,7 @@ import os
 import platform
 import sys
 
+from . import load_utils as load
 
 if platform.python_version_tuple() < ('3', '7'):
     raise RuntimeError(
@@ -35,6 +36,16 @@ def is_testing(argv=None):
     return len(argv) >= 2 and argv[1] in ['test', 'lint']
 
 
+def is_management_cmd(argv=None):
+    if not argv:
+        argv = sys.argv
+    return len(argv) > 1 and argv[1] in ['collectstatic', 'check_db']
+
+
+def insecure_secret_key_allowed(argv=None):
+    return is_testing(argv) or is_management_cmd(argv)
+
+
 IS_TESTING = is_testing()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -50,13 +61,46 @@ APP_DIR = os.path.join(BASE_DIR, 'apps')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ca*04nubpxh4m#(ni&xq=(nk4o3=z6dmt)0wr6%4f49k#%!8q-'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = load.getenv('DEBUG', bool, default=True)
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: keep the secret key used in production secret!
+_default_secret_key = 'iamabadsecretkey'
+SECRET_KEY = load.getenv('SECRET_KEY', str, default='iamabadsecretkey')
+if not insecure_secret_key_allowed() and SECRET_KEY == _default_secret_key and not DEBUG:
+    raise AssertionError('Please provide a better SECRET_KEY that is not the default.')
+
+ALLOWED_HOSTS = load.getenv('ALLOWED_HOSTS', list, default=['*'])
+if not DEBUG and not ALLOWED_HOSTS:
+    raise ValueError('ALLOWED_HOSTS cannot be empty when not in DEBUG')
+
+if not DEBUG:
+    SECURE_HSTS_SECONDS = load.getenv('SECURE_HSTS_SECONDS', int, default=60)
+    CSRF_COOKIE_SECURE = load.getenv('CSRF_COOKIE_SECURE', bool, default=True)
+    SECURE_HSTS_PRELOAD = load.getenv('SECURE_HSTS_PRELOAD', bool, default=True)
+    SECURE_SSL_REDIRECT = load.getenv('SECURE_SSL_REDIRECT', bool, default=True)
+    X_FRAME_OPTIONS = load.getenv('X_FRAME_OPTIONS', str, default='DENY').upper()
+    SESSION_COOKIE_SECURE = load.getenv('SESSION_COOKIE_SECURE', bool, default=True)
+    SECURE_BROWSER_XSS_FILTER = load.getenv('SECURE_BROWSER_XSS_FILTER', bool, default=True)
+    SECURE_CONTENT_TYPE_NOSNIFF = load.getenv('SECURE_CONTENT_TYPE_NOSNIFF', bool, default=True)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = load.getenv(
+        'SECURE_HSTS_INCLUDE_SUBDOMAINS',
+        bool,
+        default=True
+    )
+
+# Cors Configuration
+# https://github.com/adamchainz/django-cors-headers
+
+CORS_ORIGIN_ALLOW_ALL = DEBUG
+CORS_ORIGIN_WHITELIST = load.getenv(
+    'CORS_ORIGIN_WHITELIST',
+    list,
+    default=[
+        'http://localhost:8080', 'http://127.0.0.1:8080',
+        'http://localhost:3000', 'http://127.0.0.1:3000',
+    ]
+)
 
 
 # Application definition
@@ -69,12 +113,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'corsheaders',
+
     'glyph.commands',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -106,12 +153,78 @@ WSGI_APPLICATION = 'glyph.configuration.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+DEFAULT_DATABASE_TYPE = 'sqlite'
+DATABASE_TYPE = load.getenv('DATABASE_TYPE', str, default=DEFAULT_DATABASE_TYPE).lower()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+if DATABASE_TYPE == 'memory':
+    DATABASES['default']['NAME'] = ':memory:'
+elif DATABASE_TYPE != DEFAULT_DATABASE_TYPE:
+    DATABASES = {
+        'default': {
+            'ENGINE': f'django.db.backends.{DATABASE_TYPE}',
+            'NAME': load.getenv('DATABASE_DB', str),
+            'USER': load.getenv('DATABASE_USER', str),
+            'PASSWORD': load.getenv('DATABASE_PASSWORD', str),
+            'HOST': load.getenv('DATABASE_HOST', str),
+            'PORT': load.getenv('DATABASE_PORT', str, default='5432'),
+        }
+    }
+
+# Use the DATABASE_URL if provided in the environment by Heroku
+if load.getenv('DATABASE_URL', str, default='') != '':
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+
+
+# Caching
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+    }
+}
+
+USE_MEMCACHIER = load.getenv('USE_MEMCACHIER', bool, default=False)
+if USE_MEMCACHIER:
+    CACHES['default'] = {
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        # TIMEOUT is not the connection timeout! It's the default expiration
+        # timeout that should be applied to keys! Setting it to `None`
+        # disables expiration.
+        'TIMEOUT': None,
+        'LOCATION': load.getenv('MEMCACHIER_SERVERS', str),
+        'OPTIONS': {
+            'binary': True,
+            'username': load.getenv('MEMCACHIER_USERNAME', str),
+            'password': load.getenv('MEMCACHIER_PASSWORD', str),
+            'behaviors': {
+                # Enable faster IO
+                'no_block': True,
+                'tcp_nodelay': True,
+                # Keep connection alive
+                'tcp_keepalive': True,
+                # Timeout settings
+                'connect_timeout': 2000,  # ms
+                'send_timeout': 750 * 1000,  # us
+                'receive_timeout': 750 * 1000,  # us
+                '_poll_timeout': 2000,  # ms
+                # Better failover
+                'ketama': True,
+                'remove_failed': 1,
+                'retry_timeout': 2,
+                'dead_timeout': 30,
+            }
+        }
+    }
 
 
 # Password validation

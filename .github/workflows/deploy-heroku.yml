@@ -1,0 +1,20 @@
+name: Deploy Dev Heroku
+on:
+  push:
+    branches: [ develop ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.5.7 # This is the action
+        with:
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}       # your heroku email
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}   # your  heroku api key
+          heroku_app_name: ${{ secrets.HEROKU_DEV_APP_NAME }} # you application name
+          docker_heroku_process_type: web
+          usedocker: true
+          docker_build_args: |
+            REQUIREMENTS
+        env:
+          REQUIREMENTS: requirements/release.txt

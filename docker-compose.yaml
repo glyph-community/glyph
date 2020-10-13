@@ -1,18 +1,71 @@
-version: '3'
+version: '3.4'
+
+x-base-environment: &base-environment
+  image: glyph
+  env_file: .env
+  volumes:
+    - ./glyph:/opt/glyph
+  environment:
+    DATABASE_TYPE: postgresql
+    DATABASE_HOST: db
+    DATABASE_USER: postgres
+    DATABASE_DB: postgres
+    DATABASE_PASSWORD: badsecret
+    DATABASE_PORT: 5432
+
+# Common configuration shared across the different instances of the Django
+# application. Referenced with an anchor and alias to avoid repetition
+x-base-app: &base-app
+  <<: *base-environment
+  depends_on:
+    - migrate-db
+    - db
 
 services:
-  web:
+  db:
+    image: postgres:13
+    environment:
+      DATABASE_TYPE: postgres
+      POSTGRES_PASSWORD: badsecret
+
+  # Migrates the database to be up to date
+  migrate-db:
+    <<: *base-environment
     build:
       context: .
       args:
         REQUIREMENTS: requirements/development.txt
-    env_file: .env
+    command: 
+      - /opt/manage.py
+      - migrate
+    depends_on:
+      - db
+
+  # Ensures that a superuser exists in the system
+  create-superuser:
+    <<: *base-app
+    image: glyph
+    command: 
+      - /opt/manage.py
+      - shell
+      - -c
+      - > 
+          import time;
+          from django.contrib.auth import get_user_model;
+
+          print("Sleeping for 5 seconds to wait for migrations");
+          time.sleep(5);
+
+          User = get_user_model();
+          user = None if User.objects.filter(username='dcadmin').exists() else
+          User.objects.create_superuser('dcadmin', 'docker_compose@localhost.com', 'hunter2', first_name='Admin', last_name='McAdmin');
+          print("dcadmin:hunter2 user already exists") if not user else print("dcadmin user created with password 'hunter2'")
+  
+  web:
+    <<: *base-app
     command: 
       - /opt/manage.py
       - runserver
       - "0.0.0.0:8000"
-    environment: {}
-    volumes:
-      - ./glyph:/opt/glyph
     ports:
       - "8000:8000"

@@ -1,4 +1,7 @@
 collected-static
+docs
+.vscode
+.github
 .DS_Store
 
 # Byte-compiled / optimized / DLL files

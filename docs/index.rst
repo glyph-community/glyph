@@ -1,5 +1,13 @@
-Welcome to Glyph's documentation!
-=================================
+.. image:: /_static/img/glyph-logo-transparent.png
+   :align: center
+   :height: 200px
+
+.. raw:: html
+
+    <br/></br>
+
+Glyph - Puzzle Application
+==========================
 
 Glyph is an application designed to host and manage puzzles and puzzle hunt competitions effectively
 and easily.
@@ -22,18 +30,10 @@ to bring people together in positive ways. Glyph is designed to help both large 
 and small groups easily create and manage their own puzzle hunts, puzzle challenges, and more,
 while including the tools needed to communicate with their user-base to stoke fun & competition.
 
-Documentation Contents
-++++++++++++++++++++++
-
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
+   :caption: Developer Guides
 
-   dev/index
+   dev/overview
+   dev/local
    dev/contributing
-
-
-Indices and tables
-++++++++++++++++++
-
-* :ref:`genindex`
-* :ref:`search`

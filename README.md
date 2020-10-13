@@ -1,4 +1,8 @@
-# glyph - Puzzle & Puzzle Hunt Application
+<p align="center">
+    <img alt="Glyph Logo" height="250" src="docs/_static/img/glyph-logo-transparent.png" />
+</p>
+
+# Glyph - Puzzle & Puzzle Hunt Application
 
 Glyph is an application designed to host and manage puzzles and puzzle hunt competitions effectively
 and easily.

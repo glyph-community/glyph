@@ -5,6 +5,12 @@
 # Used for manage.py commands to have advanced parsing options
 ConfigArgParse==1.2.3
 
+# Used in Heroku to convert DATABASE_URL to settings structure
+dj_database_url==0.5.0
+
+# Used to allow whitelisted UIs to hit the API
+django-cors-headers==3.5.0
+
 # Used for testing coverage
 # @DEVONLY
 coverage==5.3
@@ -17,6 +23,15 @@ django-extensions==3.0.9
 # Used for PEP8 code-checking
 # @DEVONLY
 flake8==3.8.4
+
+# Used as a web process manager
+gunicorn==20.0.4
+
+# Used as a PostgreSQL connector for Django ORM
+psycopg2==2.8.6
+
+# Used for memcache caching middleware
+pylibmc==1.5.2
 
 # Used to load from the dotenv file
 python-dotenv==0.14.0
