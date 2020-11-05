@@ -57,6 +57,8 @@ PROJECT_DIR = os.path.dirname(BASE_DIR)
 # App directory where apps are located
 APP_DIR = os.path.join(BASE_DIR, 'apps')
 
+ROOT_MODULE = 'glyph'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -104,6 +106,8 @@ CORS_ORIGIN_WHITELIST = load.getenv(
 
 
 # Application definition
+_APP_ROOT = f'{ROOT_MODULE}.apps'
+_make_app_root = lambda app: f'{_APP_ROOT}.{app}'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -116,6 +120,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'glyph.commands',
+    _make_app_root('puzzle'),
+    _make_app_root('hunt'),
 ]
 
 MIDDLEWARE = [

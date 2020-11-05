@@ -228,6 +228,20 @@ Note that by default, the Docker Compose environment will use a hybrid of produc
 features, allowing for hot reloading - meaning any code changes instantly get picked up and restart
 the server - while still allowing all core components to run in a sandbox environment.
 
+Default Superuser
++++++++++++++++++
+
+When using ``docker-compose``, it will automatically generate a default superuser that can be
+logged into. It will create the user on ``docker-compose up`` if it does not already exist in
+the database, but **it will not attempt to overwrite any data** on subsequent runs.
+
+The credentials are as follow:
+
+.. code-block::
+
+   Username: dcadmin
+   Password: hunter2
+
 Code Style Guide
 ----------------
 
@@ -235,6 +249,61 @@ Before releases are made or Pull Requests are approved, they must pass PEP8-comp
 ``flake8``, a `Python style guide enforcer <https://flake8.pycqa.org/en/latest/index.html>`_.
 This will check for syntax errors, but will also ensure that any code in the project follows the
 best rules and practices of the Python community, which will ensure a high code quality.
+
+Some major rules to follow:
+
+* Try to provide docstrings for your functions and methods unless it is explicitly private - meaning
+  that it starts with an underscore (``_``). This will greatly help the readability of the project.
+* The maximum line length in a Python file is 120 characters. If you need to break a string over
+  multiple lines, you can wrap it in parentheses and try to make the lines of similar length.
+  
+  .. code-block:: python
+
+    short_string = 'woohoo, I am short'
+
+    long_string = (
+        'Maybe you are looking for a short sentence, or maybe you are looking for a longer string, '
+        'but either way, we appreciate you taking the time to read this longer sentence.'
+    )
+
+* Single quotes (``'``) are preferred for denoting strings unless it would require an escape, in
+  which case double quotes (``"``) are fine.
+
+  .. code-block:: python
+
+     valid = 'hello, world!'
+     still_valid = "Don't worry about me!"
+
+     not_valid = "why not single quote me?"
+
+* If you have a long list of arguments and named arguments to a function / method, you can either.
+
+  1. Place them all on one line if they fit
+  2. Place all positional arguments on one line and keyword arguments on another if they fit
+  3. Place each individual argument on it's own line. 
+
+  In any situation where the call is spanned over multiple lines, the closing parenthesis should be
+  indented the same amount as the first line, and the argument lines should be indented one-block,
+  most likely being four spaces.
+
+  .. code-block:: python
+
+     single_line_valid = some_function_call(1, 2, c=3)
+
+     multiple_line_condensed = my_obj.method(
+         'look_at_my_string', parameter_a, parameter_b,
+         check_valid=True, ignore_errors=False
+     )
+
+     class SomeModel(models.Model):
+
+         valid_field = models.CharField(
+             'Valid Field',
+             default='',
+             blank=True,
+             help_text='This is an example of a valid DB field with each arg on a new line'
+         )
+
 
 Documentation
 -------------

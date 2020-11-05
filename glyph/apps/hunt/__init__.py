@@ -1,0 +1,1 @@
+default_app_config = 'glyph.apps.hunt.apps.HuntConfig'

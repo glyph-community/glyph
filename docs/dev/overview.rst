@@ -77,4 +77,19 @@ has an associated `FilterSet` that determines what fields and query parameters c
 against on a model.
 
 
+Project Breakdown
+-----------------
+
+Puzzle App
+++++++++++
+
+The ``glyph.apps.puzzle`` app contains the core logic and control around puzzles and their applications.
+
+Hunt App
+++++++++
+
+The ``glyph.apps.hunt`` app contains the logic and control around simple and complex puzzle hunts
+and competitions.
+
+
 .. _drf: https://www.django-rest-framework.org/
